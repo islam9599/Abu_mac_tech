@@ -1,0 +1,196 @@
+<%- include('includes/header') %>
+<link rel="stylesheet" type="text/css" href="/css/login.css" />
+<body>
+  <!-- <h1>Hello world!!!</h1>
+  <div class="card" style="width: 18rem">
+    <img src="..." class="card-img-top" alt="..." />
+    <div class="card-body">
+      <h5 class="card-title">Card title</h5>
+      <p class="card-text">
+        Some quick example text to build on the card title and make up the bulk
+        of the card's content.
+      </p>
+      <a href="#" class="btn btn-primary">Go somewhere</a>
+    </div>
+  </div> -->
+  <!-- <h1>Signup page</h1> -->
+  <form
+    onsubmit="return validateSignUpForm()"
+    class="login_container"
+    action="/abu_tech/sign-up"
+    method="POST"
+    enctype="multipart/form-data"
+  >
+    <div class="login_frame" style="width: 650px; height: 730px">
+      <div class="login_top">
+        <span>Ro'yhatdan o'tish</span>
+        <div>
+          Bosh sahifaga qaytish
+          <a href="/abu_tech" style="color: #6440fb">Home</a>
+        </div>
+        <p>
+          Ro'yhatdan allaqachon o'tganmisiz?
+          <a href="/abu_tech/login" style="color: #6440fb">Login</a>
+        </p>
+      </div>
+
+      <div class="sign_input_frame">
+        <div class="sign_up_frame">
+          <label for="">Foydalanuvchining ismi</label>
+          <input
+            type="text"
+            placeholder="Foydalanuvchining ismi"
+            name="mb_nick"
+            class="mb_nick"
+            value=""
+            required
+          />
+        </div>
+
+        <div class="sign_up_frame">
+          <label for="">Telefon raqam</label>
+          <input
+            type="text"
+            placeholder="Telefon raqam"
+            name="mb_phone"
+            class="mb_phone"
+            value=""
+            required
+          />
+        </div>
+      </div>
+
+      <div>
+        <div class="sign_input_frame">
+          <div class="sign_up_frame">
+            <label for="">Password</label>
+            <input
+              type="password"
+              placeholder="Password kiriting"
+              name="mb_password"
+              class="mb_password"
+              value=""
+              required
+            />
+          </div>
+
+          <div class="sign_up_frame">
+            <label for="">Passwordni tasdiqlash</label>
+            <input
+              type="password"
+              placeholder="Passwordni tasdiqlash"
+              name="mb_confirm_password"
+              class="mb_confirm_password"
+              value=""
+              required
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="login_input_frame">
+        <div class="media_frame">
+          <img
+            class="upload_img_frame"
+            src="/images/default_resto.jpg"
+            alt=""
+          />
+          <div class="upload_container">
+            <span class="media_text">Brand rasmi</span>
+            <div class="filebox bs3-primary preview-image">
+              <input
+                class="upload_name"
+                value="Rasmni tanlang"
+                disabled="disabled"
+              />
+              <label for="input_file">Rasm yuklash</label>
+              <input
+                type="file"
+                id="input_file"
+                name="restaurant_img"
+                value=""
+                class="upload-hidden form-control-file restaurant_img"
+              />
+            </div>
+            <p class="thumbnail_desc">
+              Brand lagotip rasmingizni bu yerga yuklang. <br />
+              Muhim ko'rsatmalar: .jpg, .jpeg, yoki .png. <br />
+              Rasmda matn yo'q bo'lishi darkor!
+            </p>
+          </div>
+        </div>
+      </div>
+      <button class="login_btn btn" name="signup" type="submit">
+        Ro'yhatdan o'tish
+      </button>
+    </div>
+  </form>
+</body>
+
+<script>
+  $(function () {
+    let fileTarget = $(".filebox .upload-hidden");
+    let filename = "";
+    fileTarget.on("change", function () {
+      if (window.FileReader) {
+        const uploading_file = $(this)[0].files[0];
+        console.log(uploading_file);
+        const fileType = uploading_file["type"];
+        const validImageTypes = [
+          "image/jpg",
+          "image/jpeg",
+          "image/png",
+          "image/webp",
+        ];
+
+        if (!validImageTypes.includes(fileType)) {
+          alert(
+            "Iltimos ruhsat etilgan formatdagi  rasmlarni yuklang: jpg, jpeg, va png"
+          );
+        } else {
+          if (uploading_file) {
+            console.log(URL.createObjectURL(uploading_file));
+            $(".upload_img_frame")
+              .attr("src", URL.createObjectURL(uploading_file))
+              .addClass("success");
+          }
+          filename = uploading_file.name;
+        }
+      }
+      $(this).siblings(".upload-name").val(filename);
+    });
+  });
+
+  function validateSignUpForm() {
+    console.log("this is validate sign-up");
+    const mb_nick = $(".mb_nick").val();
+    const mb_phone = $(".mb_phone").val();
+    const mb_password = $(".mb_password").val();
+    const mb_confirm_password = $(".mb_confirm_password").val();
+    const restaurant_img = $(".restaurant_img").get(0).files[0] ?? null;
+
+    // alert(`mb_phone: ${mb_confirm_password}`);
+
+    if (
+      mb_nick == "" ||
+      mb_phone == "" ||
+      mb_password == "" ||
+      mb_confirm_password == ""
+    ) {
+      alert(`Iltimos hamma ma'lumotlarni kiriting!`);
+      return false;
+    } else if (mb_password !== mb_confirm_password) {
+      alert(`Iltimos passwordni to'gri kiriting!`);
+      return false;
+    }
+
+    if (!restaurant_img) {
+      alert(`Iltimos rasmni yuklang!`);
+      return false;
+    }
+
+    return true;
+  }
+</script>
+
+<%- include('includes/footer') %>

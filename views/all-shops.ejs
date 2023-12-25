@@ -1,0 +1,124 @@
+<%- include('includes/header') %>
+
+<link rel="stylesheet" type="text/css" href="/css/menu.css" />
+<link rel="stylesheet" type="text/css" href="/css/main.css" />
+
+<body>
+  <div id="main_container">
+    <div class="group_name">
+      <ul class="nav justify-content-center">
+        <li class="nav-item" style="cursor: pointer">
+          <a class="nav-link active" href="/abu_tech">Home</a>
+        </li>
+        <li class="nav-item" style="cursor: pointer">
+          <a class="nav-link" href="/abu_tech/all-shops">All Shops</a>
+        </li>
+        <li
+        class="nav-item"
+        style="cursor: pointer"
+        onclick="return confirm('Do you want to logout?')"
+        >
+        <a class="nav-link" href="/abu_tech/logout">Event</a>
+        </li>
+        <li
+          class="nav-item"
+          style="cursor: pointer"
+          onclick="return confirm('Do you want to logout?')"
+        >
+          <a class="nav-link" href="/abu_tech/logout">Logout</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="restaurant_menu_frame">
+      <div class="restaurant_container">
+        <div class="resto_table">
+          <span class="new_dish_txt"> Barcha Do'konlar Ro'yhati</span>
+          <table class="table table-hover table-sm">
+            <thead class="thead-light">
+              <tr class="thead-light">
+                <th scope="col">T/r</th>
+                <th scope="col">Do'kon Nomi</th>
+                <th scope="col">Do'kon Telefon Raqami</th>
+                <th scope="col">Do'kon Top</th>
+                <th scope="col">Do'kon Holati</th>
+              </tr>
+            </thead>
+
+            <% restaurants_data.map((value, key) => { %>
+
+            <tbody style="background-color: #fff">
+              <td><%= key + 1 %></td>
+              <td><%= value.mb_nick %></td>
+              <td><%= value.mb_phone %></td>
+              <td style="width: 13%">
+                <!-- <label for="" class="switch">
+                  <input type="checkbox" class="mb_top" />
+                  <span class="slider around"></span>
+                </label> -->
+                <!-- <label class="slider">
+                  <input type="checkbox" class="mb_top" />
+                  <span class="slider-switch around"></span>
+                </label> -->
+                <label class="custom-checkbox">
+                  <input type="checkbox" class="mb_top" id="<%= value._id %>"
+                  <%= value.mb_top === 'Y' ? 'checked' : '' %> />
+                  <span class="checkbox-slider around"></span>
+                </label>
+              </td>
+              <td style="width: 13%" cl>
+                <select class="spec_select mb_status" name="" id="<%= value._id %>">
+                  <option value="ONPAUSE"  <%= value.mb_status === "ONPAUSE" ? "selected" : "" %> >ONPAUSE</option>
+                  <option value="ACTIVE"  <%= value.mb_status === "ACTIVE" ? "selected" : "" %>>ACTIVE</option>
+                  <option value="DELETED"  <%= value.mb_status === "DELETED" ? "selected" : "" %>>DELETED</option>
+                </select>
+              </td>
+            </tbody>
+
+            <% }) %>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(function(){
+      // Manipulate restaurants top features
+
+      $(".mb_top").on("change", function(e){
+       const id = e.target.id;
+       const mb_top = e.target.checked ? "Y" : "N";
+
+      //  console.log(`${id} va ${mb_top}`);
+
+      axios.post("/abu_tech/all-shops/edit", {id: id, mb_top: mb_top}).then(response => {
+        const result = response.data;
+        if(result.state === "success") alert("successully updated");
+        else alert(result.message)
+      })
+      .catch(err => console.log(err))
+
+      })
+
+      // Manipulate restaurants status features
+
+      $(".mb_status").on("change", function(e){
+       const id = e.target.id;
+       const mb_status = $(`#${id}.mb_status`).val();
+
+       console.log(mb_status);
+
+      axios.post("/abu_tech/all-shops/edit", {id: id, mb_status: mb_status}).then(response => {
+        const result = response.data;
+        console.log(result)
+        if(result.state === "success") alert("successully updated");
+        else alert(result.message)
+      })
+      .catch(err => console.log(err))
+
+      })
+    })
+  </script>
+</body>
+
+<%- include('includes/footer') %>

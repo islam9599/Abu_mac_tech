@@ -1,0 +1,54 @@
+<!-- <h1>Login page!!!!</h1> -->
+
+<%- include('includes/header') %>
+
+<link rel="stylesheet" type="text/css" href="/css/login.css" />
+
+<body>
+  <!-- <h1>Login page</h1> -->
+  <form class="login_container" action="/abu_tech/login" method="POST">
+    <div class="login_frame" style="height: 460px">
+      <div class="login_top">
+        <span>Saytga Kirish</span>
+        <div>
+          Bosh sahifaga qaytish
+          <a href="/abu_tech" style="color: #6440fb">Home</a>
+        </div>
+        <p>
+          Ro'yhatdan o'tmaganmisiz?
+          <a href="/abu_tech/sign-up" style="color: #6440fb"
+            >Ro'yhatdan o'tkazish</a
+          >
+        </p>
+      </div>
+
+      <div class="login_input_frame">
+        <div class="login_input_container">
+          <label for="">Foydalanuvchi ismi:</label>
+          <input
+            type="text"
+            placeholder="Foydalanuvchining ismi"
+            name="mb_nick"
+            value=""
+            required
+          />
+        </div>
+
+        <div class="login_input_container">
+          <label for="">Password kiriting:</label>
+          <input
+            type="password"
+            placeholder="Password"
+            name="mb_password"
+            value=""
+            required
+          />
+        </div>
+      </div>
+
+      <button class="login_btn btn" name="login" type="submit">Kirish</button>
+    </div>
+  </form>
+</body>
+
+<%- include('includes/footer') %>
