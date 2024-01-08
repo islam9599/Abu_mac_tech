@@ -2,7 +2,7 @@
 <link rel="stylesheet" type="text/css" href="/css/menu.css" />
 <link rel="stylesheet" type="text/css" href="/css/main.css" />
 <body>
-  <!-- <h1>My restaurant page</h1>
+  <!-- <h1>My shop page</h1>
   <% if(!member) { %>
 
   <h2>Siz authenticated emassiz</h2>
@@ -32,8 +32,8 @@
       </ul>
     </div>
 
-    <div class="restaurant_menu_frame">
-      <div class="restaurant_container">
+    <div class="shop_menu_frame">
+      <div class="shop_container">
         <div class="dish_table">
           <span class="new_dish_txt">
             <%=member.mb_nick.toUpperCase()%> Shop Menyusi</span
@@ -48,23 +48,23 @@
               <th scope="col">Qurilma narxi</th>
               <th scope="col">Qurilma qoldiq miqdori</th>
               <th scope="col">Qurilma holati</th>
+              <th scope="col">Qurilmani edit qilish</th>
             </thead>
 
-            <% restaurant_data.map((value, key) => { %>
+            <% shop_data.map((value, key) => { %>
 
             <tbody style="background-color: #fff">
               <td><%= key + 1 %></td>
               <td><%= value.product_name %></td>
               <td><%= value.product_collection %></td>
               <td>
-                <%= value.product_collection === 'drink' ? value.product_volume
-                : value.product_size %>
+                <%= value.product_memory %>
               </td>
               <td><%= value.product_price %></td>
               <td><%= value.product_left_cnt %></td>
               <td>
                 <select
-                  class="spec_select new_product_status"
+                  class="spec_select new_product_status "
                   id="<%= value._id %>"
                 >
                   <option value="PAUSED"  <%= value.product_status === 'PAUSED' ? 'selected' : ''
@@ -76,6 +76,9 @@
                    PROCESS
                   </option>
                 </select>
+              </td>
+              <td>
+               <button class="spec_select product_edit">Edit product</button>
               </td>
             </tbody>
 
@@ -148,34 +151,24 @@
                 name="product_collection"
                 id=""
               >
-                <option value="dish" selected>PC</option>
-                <option value="salad">Notebook</option>
-                <option value="dessert">Phone</option>
-                <option value="drink">Quluqchin</option>
+                <option value="pc" selected>PC</option>
+                <option value="laptop">Notebook</option>
+                <option value="phone">Phone</option>
+                <option value="earphone">Quluqchin</option>
                 <option value="etc">Boshqalar</option>
               </select>
             </div>
 
-            <div class="half_input" id="product_size">
-              <label for="">Qurilma Hajmi</label>
-              <select class="product_size" name="product_size" id="">
-                <option value="small">Kichkina</option>
-                <option value="normal" selected>O'rtacha</option>
-                <option value="large">Katta</option>
-                <option value="set">Set</option>
+            <div class="half_input" id="product_memory">
+              <label for="">Qurilma Ichki Xotira Hajmi</label>
+              <select class="product_memory" name="product_memory" id="">
+                <option value="8">8gb</option>
+                <option value="16" selected>16gb</option>
+                <option value="32">32gb</option>
+                <option value="64">64gb</option>
               </select>
             </div>
 
-            <div class="half_input" id="product_volume" style="display: none">
-              <label for="">Ichimlik Hajmi</label>
-              <select class="product_volume" name="product_volume" id="">
-                <option value="0.5">0.5 litr</option>
-                <option value="1" selected>1 litr</option>
-                <option value="1.2">1.2 litr</option>
-                <option value="1.5">1.5 litr</option>
-                <option value="2">2 litr</option>
-              </select>
-            </div>
           </div>
 
           <div class="long_input">
@@ -274,8 +267,8 @@
 
               <input
                 value="<%= member._id %>"
-                name="restaurant_mb_id"
-                class="restaurant_mb_id"
+                name="shop_mb_id"
+                class="shop_mb_id"
                 hidden
               />
             </div>
@@ -295,20 +288,16 @@
   </div>
   <script>
     $(function () {
-      $(".product_collection").on("change", () => {
-        const selected_value = $(".product_collection").val();
-        if (selected_value === "drink") {
-          $("#product_volume").show();
-          $("#product_size").hide();
-        } else {
-          $("#product_volume").hide();
-          $("#product_size").show();
-        }
+      // $(".product_collection").on("change", () => {
+      //   const selected_value = $(".product_collection").val();
       });
 
       $(".hidding_btn").on("click", function () {
         $(".dish_container").slideToggle(500);
         $(".hidding_btn").css("display", "none");
+      });
+      $(".product_edit").on("click", function () {
+      window.location.replace("/abu_tech/products/menu");
       });
 
       // Yangi product statusi
@@ -320,7 +309,7 @@
         const mb_id = ` <%= member._id %> `;
 
         try{
-          const url = `/resto/products/edit/${id}`;
+          const url = `/abu_tech/products/edit/${id}`;
           console.log(url);
           const response = await axios.post(url, {id: id, product_status: product_status});
           console.log("response", response);
@@ -338,24 +327,51 @@
           console.log("updateChosenProduct err: ", err)
         }
       });
-    });
+    //   $(".product_edit").on("change", async function(e) {
+    //     const id = e.target.id;
+    //     console.log(id);
+    //     const product_edit = $(`#${id}.product_edit`).val();
+    //     const mb_id = ` <%= member._id %> `;
+
+    //     try{
+    //       const url = `/abu_tech/products/edit/${id}`;
+    //       console.log(url);
+    //       const response = await axios.post(url, {id: id});
+    //       console.log("response", response);
+    //       const result = response.data;
+    //       // console.log(result);
+
+    //       if(result.state == "success") {
+    //         alert("success");
+    //         location.reload();
+    //       } else {
+    //         alert(result.message)
+    //       }
+
+    //     }catch(err){
+    //       console.log("updateChosenProduct err: ", err)
+    //     }
+    //   });
+    // });
 
     function validateForm() {
-      const restaurant_mb_id = $(".restaurant_mb_id").val(),
+      const shop_mb_id = $(".shop_mb_id").val(),
         product_name = $(".product_name").val(),
         product_price = $(".product_price").val(),
         product_left_cnt = $(".product_left_cnt").val(),
         product_collection = $(".product_collection").val(),
         product_description = $(".product_description").val(),
+        product_memory = $(".product_memory").val(),
         product_status = $(".product_status").val();
 
       if (
-        restaurant_mb_id === "" ||
+        shop_mb_id === "" ||
         product_name === "" ||
         product_price === "" ||
         product_left_cnt === "" ||
         product_collection === "" ||
         product_description === "" ||
+        product_memory === "" ||
         product_status === ""
       ) {
         alert(`Iltimos hamma ma'lumotlarni tog'ri kiriting!`);

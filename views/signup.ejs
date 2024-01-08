@@ -92,7 +92,7 @@
         <div class="media_frame">
           <img
             class="upload_img_frame"
-            src="/images/default_resto.jpg"
+            src="/images/default_shop.webp"
             alt=""
           />
           <div class="upload_container">
@@ -107,9 +107,9 @@
               <input
                 type="file"
                 id="input_file"
-                name="restaurant_img"
+                name="shop_img"
                 value=""
-                class="upload-hidden form-control-file restaurant_img"
+                class="upload-hidden form-control-file shop_img"
               />
             </div>
             <p class="thumbnail_desc">
@@ -167,7 +167,7 @@
     const mb_phone = $(".mb_phone").val();
     const mb_password = $(".mb_password").val();
     const mb_confirm_password = $(".mb_confirm_password").val();
-    const restaurant_img = $(".restaurant_img").get(0).files[0] ?? null;
+    const shop_img = $(".shop_img").get(0).files[0] ?? null;
 
     // alert(`mb_phone: ${mb_confirm_password}`);
 
@@ -184,7 +184,7 @@
       return false;
     }
 
-    if (!restaurant_img) {
+    if (!shop_img) {
       alert(`Iltimos rasmni yuklang!`);
       return false;
     }

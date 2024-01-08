@@ -16,9 +16,8 @@
         <li
         class="nav-item"
         style="cursor: pointer"
-        onclick="return confirm('Do you want to logout?')"
         >
-        <a class="nav-link" href="/abu_tech/logout">Event</a>
+        <a class="nav-link"  href="/abu_tech/all-events">Events</a>
         </li>
         <li
           class="nav-item"
@@ -30,11 +29,11 @@
       </ul>
     </div>
 
-    <div class="restaurant_menu_frame">
-      <div class="restaurant_container">
+    <div class="shop_menu_frame">
+      <div class="shop_container">
         <div class="resto_table">
           <span class="new_dish_txt"> Barcha Do'konlar Ro'yhati</span>
-          <table class="table table-hover table-sm">
+          <table class="table">
             <thead class="thead-light">
               <tr class="thead-light">
                 <th scope="col">T/r</th>
@@ -45,7 +44,7 @@
               </tr>
             </thead>
 
-            <% restaurants_data.map((value, key) => { %>
+            <% shops_data.map((value, key) => { %>
 
             <tbody style="background-color: #fff">
               <td><%= key + 1 %></td>
@@ -77,13 +76,41 @@
 
             <% }) %>
           </table>
+          <span class="new_dish_txt" style="margin-top: 50px;"> Barcha Eventlar Ro'yhati</span>
+          <table class="table table-hover table-sm">
+            <thead class="thead-light">
+              <tr class="thead-light">
+                <th scope="col">T/r</th>
+                <th scope="col">Event Nomi</th>
+                <th scope="col">Event Kuni</th>
+                <th scope="col">Do'kon Holati</th>
+              </tr>
+            </thead>
+
+            <% events_data.map((value, key) => { %>
+
+            <tbody style="background-color: #fff">
+              <td><%= key + 1 %></td>
+              <td><%= value.event_subject %></td>
+              <td><%= value.event_date %></td>
+          
+              <td style="width: 13%" cl>
+                <select class="spec_select event_status" name="" id="<%= value._id %>">
+                  <option value="active"  <%= value.event_status === "active" ? "selected" : "" %> >ACTIVE</option>
+                  <option value="deleted"  <%= value.event_status === "deleted" ? "selected" : "" %>>DELETED</option>
+                </select>
+              </td>
+            </tbody>
+
+            <% }) %>
+          </table>
         </div>
       </div>
     </div>
   </div>
   <script>
     $(function(){
-      // Manipulate restaurants top features
+      // Manipulate shops top features
 
       $(".mb_top").on("change", function(e){
        const id = e.target.id;
@@ -100,7 +127,7 @@
 
       })
 
-      // Manipulate restaurants status features
+      // Manipulate shops status features
 
       $(".mb_status").on("change", function(e){
        const id = e.target.id;
@@ -109,6 +136,21 @@
        console.log(mb_status);
 
       axios.post("/abu_tech/all-shops/edit", {id: id, mb_status: mb_status}).then(response => {
+        const result = response.data;
+        console.log(result)
+        if(result.state === "success") alert("successully updated");
+        else alert(result.message)
+      })
+      .catch(err => console.log(err))
+
+      })
+      $(".event_status").on("change", function(e){
+       const id = e.target.id;
+       const event_status = $(`#${id}.event_status`).val();
+
+       console.log(event_status);
+
+      axios.post("/abu_tech/all-events/edit", {id: id, event_status: event_status}).then(response => {
         const result = response.data;
         console.log(result)
         if(result.state === "success") alert("successully updated");

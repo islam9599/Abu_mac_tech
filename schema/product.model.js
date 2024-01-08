@@ -3,8 +3,12 @@ const mongoose = require("mongoose");
 const {
   product_collection_enums,
   product_status_enums,
-  product_size_enums,
   product_volume_enums,
+  product_display_enums,
+  product_memory_enums,
+  product_hard_storage_enums,
+  product_graphics_enums,
+  product_chip_enums,
 } = require("../lib/config");
 
 const Schema = mongoose.Schema;
@@ -42,29 +46,63 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    product_size: {
-      type: String,
-      default: "normal",
-      required: function () {
-        const sized_list = ["dish", "salad", "dessert"];
-        return sized_list.includes(this.product_collection);
-      },
-      enum: {
-        values: product_size_enums,
-        message: "{value} is not among permitted enum values",
-      },
-    },
-    product_volume: {
+    product_display: {
       type: Number,
-      default: 1,
-      required: function () {
-        return this.product_collection === "drink";
-      },
+      required: false,
       enum: {
-        values: product_volume_enums,
+        values: product_display_enums,
         message: "{value} is not among permitted enum values",
       },
     },
+    product_memory: {
+      type: Number,
+      required: true,
+      enum: {
+        values: product_memory_enums,
+        message: "{value} is not among permitted enum values",
+      },
+    },
+    product_storage: {
+      type: Number,
+      required: false,
+      enum: {
+        values: product_hard_storage_enums,
+        message: "{value} is not among permitted enum values",
+      },
+    },
+    product_graphics: {
+      type: Number,
+      required: false,
+      enum: {
+        values: product_graphics_enums,
+        message: "{value} is not among permitted enum values",
+      },
+    },
+    product_chip: {
+      type: String,
+      default: "intel",
+      // required:
+      //  function () {
+      //   const sized_list = ["dish", "salad", "dessert"];
+      //   return sized_list.includes(this.product_collection);
+      // },
+
+      enum: {
+        values: product_chip_enums,
+        message: "{value} is not among permitted enum values",
+      },
+    },
+    // product_volume: {
+    //   type: Number,
+    //   default: 1,
+    //   required: function () {
+    //     return this.product_collection === "drink";
+    //   },
+    //   enum: {
+    //     values: product_volume_enums,
+    //     message: "{value} is not among permitted enum values",
+    //   },
+    // },
     product_description: {
       type: String,
       required: true,
@@ -84,7 +122,7 @@ const productSchema = new mongoose.Schema(
       required: false,
       default: 0,
     },
-    restaurant_mb_id: {
+    shop_mb_id: {
       type: Schema.Types.ObjectId,
       ref: "Member",
       required: false,
@@ -95,10 +133,9 @@ const productSchema = new mongoose.Schema(
 
 productSchema.index(
   {
-    restaurant_mb_id: 1,
+    shop_mb_id: 1,
     product_name: 1,
-    product_size: 1,
-    product_volume: 1,
+    product_memory: 1,
   }, // Texas-De-Brazilcoca-colanull?
   { unique: true }
 );

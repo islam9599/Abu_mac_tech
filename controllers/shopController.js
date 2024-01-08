@@ -2,7 +2,8 @@ const assert = require("assert");
 const Member = require("../models/Member");
 const Product = require("../models/Product");
 const Definer = require("../lib/mistake");
-const Restaurant = require("../models/Shop");
+const Shop = require("../models/Shop");
+const Event = require("../models/Event");
 
 let shopController = module.exports;
 
@@ -11,8 +12,8 @@ shopController.getShops = async (req, res) => {
     console.log("GET: cont/getShops");
     const data = req.query;
     // console.log("query_data:::::", data);
-    const restaurant = new Restaurant();
-    const result = await restaurant.getShopsData(req.member, data);
+    const shop = new Shop();
+    const result = await shop.getShopsData(req.member, data);
 
     res.json({ state: "success", data: result });
   } catch (err) {
@@ -24,8 +25,8 @@ shopController.getChosenShop = async (req, res) => {
   try {
     console.log("GET: cont/getChosenShop");
     const id = req.params.id;
-    const restaurant = new Restaurant();
-    const result = await restaurant.getChosenShopData(req.member, id);
+    const shop = new Shop();
+    const result = await shop.getChosenShopData(req.member, id);
     res.json({ state: "success", data: result });
   } catch (err) {
     console.log(`ERROR, cont/getChosenShop, ${err.message}`);
@@ -54,7 +55,7 @@ shopController.getMyShopProducts = async (req, res) => {
     const product = new Product();
     const data = await product.getAllProductsDataResto(req.member);
 
-    res.render("shop-menu", { restaurant_data: data });
+    res.render("shop-menu", { shop_data: data });
   } catch (err) {
     console.log(`ERROR, cont/getMyShopProducts, ${err.message}`);
     res.redirect("/abu_tech");
@@ -212,13 +213,18 @@ shopController.getAllShop = async (req, res) => {
   try {
     console.log("GET cont/getAllShop");
 
-    const restaurant = new Restaurant();
+    const shop = new Shop();
+    const shops_data = await shop.getAllShopsData();
 
-    const restaurants_data = await restaurant.getAllShopsData();
+    const event = new Event();
+    const events_data = await event.getAllEventsData();
 
-    // console.log("restaurant_data:", restaurants_data);
+    // console.log("shops_data:", shops_data);
 
-    res.render("all-shops", { restaurants_data: restaurants_data });
+    res.render("all-shops", {
+      shops_data: shops_data,
+      events_data: events_data,
+    });
   } catch (err) {
     console.log(`ERROR, cont/getAllShop`);
     res.json({ state: "fail", message: err.message });
@@ -229,9 +235,9 @@ shopController.updateShopByAdmin = async (req, res) => {
   try {
     console.log("POST cont/updateShopByAdmin");
 
-    const restaurant = new Restaurant();
+    const shop = new Shop();
 
-    const result = await restaurant.updateShopByAdminData(req.body);
+    const result = await shop.updateShopByAdminData(req.body);
 
     // console.log(result);
 

@@ -1,16 +1,16 @@
-.restaurant_menu_frame {
+.shop_menu_frame {
   position: relative;
   padding-bottom: 80px;
   width: 100%;
-  height: auto;
+  height: 1300px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #2c261e;
+  background: #4f547b;
 }
 
-.restaurant_menu_frame .restaurant_container {
+.shop_menu_frame .shop_container {
   position: relative;
   margin-top: 100px;
   width: 1320px;
@@ -21,7 +21,7 @@
   align-items: center;
 }
 
-.restaurant_container .dish_table {
+.shop_container .dish_table {
   position: relative;
   width: 100%;
   height: auto;
@@ -31,7 +31,7 @@
   flex-direction: column;
   align-items: center;
 }
-.restaurant_container .resto_table {
+.shop_container .resto_table {
   position: relative;
   width: 85%;
   height: auto;
@@ -178,7 +178,7 @@
   color: #4f547b;
 }
 
-.restaurant_container .dish_container {
+.shop_container .dish_container {
   position: relative;
   margin-top: 20px;
   width: 100%;
