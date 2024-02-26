@@ -4,6 +4,7 @@ const Product = require("../models/Product");
 const Definer = require("../lib/mistake");
 const Shop = require("../models/Shop");
 const Event = require("../models/Event");
+const Swal = require("sweetalert2");
 
 let shopController = module.exports;
 

@@ -5,7 +5,7 @@ const productController = require("./controllers/productController");
 const eventController = require("./controllers/eventController");
 const uploader_product = require("./utils/upload-multer")("products");
 const uploader_members = require("./utils/upload-multer")("members");
-const uploader_event = require("./utils/upload-multer.js")("event");
+const uploader_event = require("./utils/upload-multer.js")("events");
 
 /**********************************
  *            BSSR EJS     *
@@ -74,11 +74,11 @@ router_bssr.post(
   shopController.updateShopByAdmin
 );
 
-router_bssr.post(
-  "/event/image",
-  uploader_event.single("event_image"),
-  eventController.imageInsertion
-);
+// router_bssr.post(
+//   "/event/image",
+//   uploader_event.single("event_image"),
+//   eventController.imageInsertion
+// );
 router_bssr.get(
   "/all-events",
   shopController.validateAdmin,
@@ -87,6 +87,7 @@ router_bssr.get(
 router_bssr.post(
   "/event/create",
   shopController.validateAdmin,
+  uploader_event.array("event_images", 2),
   eventController.createEvent
 );
 router_bssr.post(

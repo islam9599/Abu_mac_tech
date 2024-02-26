@@ -16,14 +16,15 @@ class Event {
     this.eventModel = EventModel;
   }
 
-  async createEventData(member, data) {
+  async createEventData(data, member) {
     try {
-      data.mb_id = shapeIntoMongooseObjectId(member._id);
+      data.event_id = shapeIntoMongooseObjectId(member._id);
 
-      const new_event = await this.saveEvenData(data);
-      assert.ok(new_event, Definer.general_err1);
+      const new_event = new this.eventModel(data);
+      const result = await new_event.save();
+      assert.ok(result, Definer.general_err1);
 
-      return new_event;
+      return result;
     } catch (err) {
       throw err;
     }

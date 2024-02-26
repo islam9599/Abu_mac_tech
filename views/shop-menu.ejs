@@ -25,7 +25,7 @@
         <li
           class="nav-item"
           style="cursor: pointer"
-          onclick="return confirm('Do you want to logout?')"
+          onclick="return  confirm('Do you want to logout?')"
         >
           <a class="nav-link" href="/abu_tech/logout">Logout</a>
         </li>
@@ -94,7 +94,7 @@
         </div>
         <form
           onsubmit="return validateForm()"
-          class="dish_container"
+          class="product_container"
           action="/abu_tech/products/create"
           method="POST"
           enctype="multipart/form-data"
@@ -170,7 +170,34 @@
             </div>
 
           </div>
+             <div class="half_input_frame">
+            <div class="half_input">
+              <label for="">Qurilma Rangi</label>
+              <select
+                class="product_color"
+                name="product_color"
+                id=""
+              >
+                <option value="gold" selected>Gold</option>
+                <option value="silver">Silver</option>
+                <option value="titanium">Titanium</option>
+                <option value="gray">Gray</option>
+                <option value="etc">Boshqalar</option>
+              </select>
+            </div>
 
+            <div class="half_input" id="product_brand">
+              <label for="">Qurilma Brand</label>
+              <select class="product_brand" name="product_brand" id="">
+                <option value="apple">Apple</option>
+                <option value="samsung" selected>Samsung</option>
+                <option value="xiaomi">Xiaomi</option>
+                <option value="microsoft">Microsoft</option>
+                <option value="etc">Etc</option>
+              </select>
+            </div>
+
+          </div>
           <div class="long_input">
             <label for="">Qurilma haqida</label>
             <textarea
@@ -278,9 +305,15 @@
             class="long_input"
             style="align-items: flex-end; margin-bottom: 25px"
           >
-            <button type="submit" class="btn btn-primary" id="create_product">
+            <button type="submit" class="btn btn-primary">
               Chop etish
             </button>
+          </div>
+          <div
+            class="long_input"
+            style="align-items: flex-end; margin-bottom: 25px"
+           >
+            <button class="btn btn-primary hidding_form">Bekor Qilish</button>
           </div>
         </form>
       </div>
@@ -293,9 +326,17 @@
       });
 
       $(".hidding_btn").on("click", function () {
-        $(".dish_container").slideToggle(500);
+        $(".product_container").slideToggle(500);
         $(".hidding_btn").css("display", "none");
       });
+
+      $(".hidding_form").on("click", function () {
+        $(".product_container").css("display", "none");
+        $(".hidding_btn").slideToggle(500);
+      });
+
+
+
       $(".product_edit").on("click", function () {
       window.location.replace("/abu_tech/products/menu");
       });
@@ -317,7 +358,7 @@
           // console.log(result);
 
           if(result.state == "success") {
-            alert("success");
+           Swal.fire("success!");
             location.reload();
           } else {
             alert(result.message)
@@ -362,7 +403,9 @@
         product_collection = $(".product_collection").val(),
         product_description = $(".product_description").val(),
         product_memory = $(".product_memory").val(),
-        product_status = $(".product_status").val();
+        product_color = $(".product_color").val(),
+        product_brand = $(".product_brand").val();
+      
 
       if (
         shop_mb_id === "" ||
@@ -371,10 +414,12 @@
         product_left_cnt === "" ||
         product_collection === "" ||
         product_description === "" ||
-        product_memory === "" ||
-        product_status === ""
+        product_memory === ""
+      
       ) {
-        alert(`Iltimos hamma ma'lumotlarni tog'ri kiriting!`);
+        // alert(`Iltimos hamma ma'lumotlarni tog'ri kiriting!`);
+        Swal.fire(`Iltimos hamma ma'lumotlarni tog'ri kiriting!`);
+
         return false;
       } else return true;
     }

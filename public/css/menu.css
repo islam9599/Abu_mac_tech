@@ -2,7 +2,7 @@
   position: relative;
   padding-bottom: 80px;
   width: 100%;
-  height: 1300px;
+  height: auto;
 
   display: flex;
   flex-direction: column;
@@ -31,7 +31,18 @@
   flex-direction: column;
   align-items: center;
 }
-.shop_container .resto_table {
+.shop_container .shops_table {
+  position: relative;
+  width: 85%;
+  height: auto;
+  margin-top: 30px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.new_event_wrapper {
   position: relative;
   width: 85%;
   height: auto;
@@ -178,7 +189,17 @@
   color: #4f547b;
 }
 
-.shop_container .dish_container {
+.shop_container .product_container {
+  position: relative;
+  margin-top: 20px;
+  width: 100%;
+  height: auto;
+
+  display: none;
+  flex-direction: column;
+  align-items: center;
+}
+.event_container {
   position: relative;
   margin-top: 20px;
   width: 100%;
@@ -237,7 +258,7 @@
   color: #4f547b;
 }
 
-.dish_container .half_input_frame {
+.half_input_frame {
   position: relative;
   margin-top: 25px;
   width: 100%;
@@ -356,6 +377,33 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+}
+
+.upload_img_box img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  display: block;
+  border-radius: 10px;
+}
+.event_media_frame {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  display: flex;
+  flex-direction: row;
+}
+
+.event_media_frame .upload_img_box {
+  position: relative;
+  width: 39%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-right: 15px;
 }
 
 .upload_img_box img {

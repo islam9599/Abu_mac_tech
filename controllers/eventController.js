@@ -37,16 +37,30 @@ eventController.getAllActiveEvents = async (req, res) => {
 eventController.createEvent = async (req, res) => {
   try {
     console.log("POST, cont/createEvent");
-    assert.ok(req.member, Definer.general_err1);
+    assert(req.files, Definer.general_err3);
+
+    let data = req.body;
+    // console.log(data);
+    data.event_images = req.files.map((ele) => {
+      return ele.path;
+    });
 
     const event = new Event();
-    const result = await event.createEventData(req.member, req.body);
+    const result = await event.createEventData(data, req.member);
     assert.ok(result, Definer.general_err1);
-    res.end("success");
+    const html = `<script>
+                    alert('new event added successfully');
+                    window.location.replace("/abu_tech/all-shops")
+                  </script>`;
+    res.end(html);
     // res.json({ state: "success", data: result });
   } catch (err) {
     console.log(`ERROR, cont/createEvent`);
-    res.json({ state: "fail", message: err.message });
+    const html = `<script>
+                    alert('mongo db err:::');
+                    window.location.replace("/abu_tech/all-shops")
+                  </script>`;
+    res.end(html);
   }
 };
 

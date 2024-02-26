@@ -6,7 +6,7 @@ body {
 #main_container {
   position: relative;
   width: 100%;
-  height: 100%;
+  height: auto;
   display: flex;
   flex-direction: column;
   background: #661b62;
@@ -21,8 +21,14 @@ a {
 .nav-item a {
   color: #d3c08d;
 }
+
 .nav-item a .disabled {
   color: #898071;
+}
+
+.active-link {
+  color: red; /* You can customize the styles for the active state */
+  font-weight: bold;
 }
 
 .group_name {

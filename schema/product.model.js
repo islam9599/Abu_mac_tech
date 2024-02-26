@@ -7,8 +7,10 @@ const {
   product_display_enums,
   product_memory_enums,
   product_hard_storage_enums,
-  product_graphics_enums,
+  product_colors_enums: product_graphics_enums,
   product_chip_enums,
+  product_colors_enums,
+  product_brands_enums,
 } = require("../lib/config");
 
 const Schema = mongoose.Schema;
@@ -70,17 +72,19 @@ const productSchema = new mongoose.Schema(
         message: "{value} is not among permitted enum values",
       },
     },
-    product_graphics: {
-      type: Number,
+    product_color: {
+      type: String,
       required: false,
+      default: "gold",
       enum: {
-        values: product_graphics_enums,
+        values: product_colors_enums,
         message: "{value} is not among permitted enum values",
       },
     },
-    product_chip: {
+    product_brand: {
       type: String,
-      default: "intel",
+      required: false,
+      default: "apple",
       // required:
       //  function () {
       //   const sized_list = ["dish", "salad", "dessert"];
@@ -88,7 +92,7 @@ const productSchema = new mongoose.Schema(
       // },
 
       enum: {
-        values: product_chip_enums,
+        values: product_brands_enums,
         message: "{value} is not among permitted enum values",
       },
     },

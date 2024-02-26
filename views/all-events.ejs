@@ -13,12 +13,8 @@
         <li class="nav-item" style="cursor: pointer">
           <a class="nav-link" href="/abu_tech/all-shops">All Shops</a>
         </li>
-        <li
-          class="nav-item"
-          style="cursor: pointer"
-          onclick="return confirm('Do you want to logout?')"
-        >
-          <a class="nav-link" href="/abu_tech/all-events">Event</a>
+        <li class="nav-item">
+          <a class="nav-link" href="/abu_tech/all-events">Events</a>
         </li>
         <li
           class="nav-item"
@@ -53,14 +49,183 @@
             >
               <%= value.event_content %>
             </p>
-            <a href="#" class="btn btn-primary">Go event</a>
           </div>
         </div>
 
         <% }) %>
       </div>
+      <div class="new_event_wrapper">
+        <div
+          class="long_input"
+          style="align-items: flex-end; margin-bottom: 25px"
+        >
+          <button class="btn btn-primary hidding_btn">Event qo'shish</button>
+        </div>
+        <form
+          onsubmit="return validateForm()"
+          class="event_container"
+          action="/abu_tech/event/create"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <div class="long_input" style="display: flex; align-items: center">
+            <span class="new_dish_txt">Yangi Event</span>
+          </div>
+          <div>
+            <div class="half_input_frame">
+              <div class="half_input">
+                <label for="">Event Nomi</label>
+                <input
+                  type="text"
+                  placeholder="Event Title"
+                  name="event_subject"
+                  class="event_subject"
+                />
+              </div>
+              <div class="half_input">
+                <label for="">Event Date</label>
+                <input
+                  type="date"
+                  placeholder="Event Date"
+                  name="event_date"
+                  class="event_date"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="half_input_frame">
+            <div class="half_input">
+              <label for="">Event Content</label>
+              <textarea
+                placeholder="Event Content"
+                name="event_content"
+                class="event_content"
+                id=""
+                cols="30"
+                rows="10"
+              ></textarea>
+            </div>
+
+            <div class="half_input">
+              <label for="">Event Rasmlari</label>
+              <div class="event_media_frame">
+                <div class="upload_img_box">
+                  <img
+                    src="/images/upload.png"
+                    class="1"
+                    id="image_section_1"
+                    alt=""
+                  />
+                  <input
+                    type="file"
+                    id="file"
+                    name="event_images"
+                    class="image_one"
+                    onchange="previewFileHandler(this, 1)"
+                  />
+                </div>
+
+                <div class="upload_img_box">
+                  <img
+                    src="/images/upload.png"
+                    class="2"
+                    id="image_section_2"
+                    alt=""
+                  />
+                  <input
+                    type="file"
+                    id="file"
+                    name="event_images"
+                    class="image_two"
+                    onchange="previewFileHandler(this, 2)"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="long_input"
+            style="align-items: flex-end; margin-bottom: 25px"
+          >
+            <button type="submit" class="btn btn-primary" id="create_event">
+              Chop etish
+            </button>
+          </div>
+          <div
+            class="long_input"
+            style="align-items: flex-end; margin-bottom: 25px"
+          >
+            <button
+              type="submit"
+              class="btn btn-primary hidding_form_btn"
+              id="create_event"
+            >
+              Bekor Qilish
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
+  <script>
+    $(document).ready(function () {
+      $(".nav-link").click(function () {
+        $(".nav-link").removeClass("active-link");
+        $(this).addClass("active-link");
+      });
+    });
+    $(".hidding_btn").on("click", function () {
+      $(".event_container").slideToggle(500);
+      $(".hidding_btn").css("display", "none");
+    });
+    $(".hidding_form_btn").on("click", function () {
+      $(".event_container").css("display", "none");
+      $(".hidding_btn").slideToggle(500);
+    });
+
+    function validateForm() {
+      const event_subject = $(".event_subject").val(),
+        event_content = $(".event_content").val(),
+        event_date = $(".event_date").val();
+      console.log(event_content, event_subject);
+
+      if (event_subject === "" || event_content === "" || event_date === "") {
+        // alert(`Iltimos hamma ma'lumotlarni tog'ri kiriting!`);
+        Swal.fire(`Iltimos hamma ma'lumotlarni tog'ri kiriting!`);
+
+        return false;
+      } else return true;
+    }
+
+    function previewFileHandler(input, order) {
+      console.log(input);
+      const image_class_name = input.className;
+      const file = $(`.${image_class_name}`).get(0).files[0],
+        fileType = file["type"],
+        validImageTypes = [
+          "image/jpg",
+          "image/jpeg",
+          "image/png",
+          "image/webp",
+        ];
+
+      if (!validImageTypes.includes(fileType)) {
+        alert(
+          `Iltimos ruhsat etilgan rasm formatdagi rasmlarni yuklang! (jpg, jpeg va png)`
+        );
+      } else {
+        if (file) {
+          let reader = new FileReader();
+          reader.onload = function () {
+            $(`#image_section_${order}`).attr("src", reader.result);
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+    }
+  </script>
 </body>
 
 <%- include('includes/footer') %>
