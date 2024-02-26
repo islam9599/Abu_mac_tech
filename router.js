@@ -9,5 +9,6 @@ const memberController = require("./controllers/memberController.js");
 // Member related routers
 
 router.post("/signup", memberController.signup);
+router.post("/login", memberController.login);
 
 module.exports = router;
