@@ -5,15 +5,10 @@ let memberController = module.exports;
 const jwt = require("jsonwebtoken");
 const Definer = require("../lib/mistake");
 
-// memberController.home = (req, res) => {
-//   console.log("GET cont.home");
-//   res.send("Home sahifadasiz");
-// };
 memberController.signup = async (req, res) => {
   try {
     console.log("POST, cont/signup");
     const data = req.body;
-    // console.log(`body:::`, req.body);
     const member = new Member();
     const new_member = await member.signupData(data);
     const token = memberController.createToken(new_member);
@@ -22,8 +17,6 @@ memberController.signup = async (req, res) => {
       maxAge: 6 * 3600 * 1000,
       httpOnly: true,
     });
-
-    // res.send("done");
     res.json({ state: "success", data: new_member });
   } catch (err) {
     console.log(`ERROR, cont/signup`);
@@ -31,34 +24,19 @@ memberController.signup = async (req, res) => {
   }
 };
 memberController.login = async (req, res) => {
-  //   console.log("POST cont.login");
-  //   res.send("Login sahifadasiz");
   try {
     console.log("POST, cont/login");
     const data = req.body;
-    // console.log(`body:::`, req.body);
     const member = new Member();
     const result = await member.loginData(data);
 
-    // console.log("result:", result);
     const token = memberController.createToken(result);
-    // console.log("token::::", token);
-    res.cookie("access_token", token, {
-      maxAge: 6 * 3600 * 1000,
-      httpOnly: true,
-    });
 
-    // res.send("done");
     res.json({ state: "success", data: result });
   } catch (err) {
     console.log(`ERROR, cont/login`);
     res.redirect("/abu_tech");
   }
-};
-memberController.logout = (req, res) => {
-  console.log("GET cont.logout");
-  res.cookie("access_token", null, { maxAge: 0, httpOnly: true });
-  res.json({ state: "success", data: "logout successfully!" });
 };
 
 memberController.createToken = (result) => {
@@ -67,8 +45,6 @@ memberController.createToken = (result) => {
       _id: result._id,
       mb_nick: result.mb_nick,
       mb_type: result.mb_type,
-      // mb_phone: result.mb_phone,
-      // mb_status: result.mb_status,
     };
 
     const token = jwt.sign(upload_data, process.env.SECRET_TOKEN, {
@@ -92,43 +68,6 @@ memberController.checkMyAuthentication = (req, res) => {
     res.json({ state: "success", data: member });
   } catch (err) {
     throw err;
-  }
-};
-
-memberController.getChosenMember = async (req, res) => {
-  try {
-    console.log("GET, cont/getChosenMember");
-    const id = req.params.id;
-
-    const member = new Member();
-    const result = await member.getChosenMemberData(req.member, id);
-    // console.log("result:::::", result);
-
-    res.json({ state: "success", data: result });
-  } catch (err) {
-    console.log(`ERROR, cont/getChosenMember`);
-    res.json({ state: "fail", message: err.message });
-  }
-};
-memberController.likeMemberChosen = async (req, res) => {
-  try {
-    console.log("POST, cont/likeMemberChosen");
-    assert.ok(req.member, Definer.auth_err5);
-
-    const like_ref_id = req.body.like_ref_id,
-      group_type = req.body.group_type,
-      member = new Member(),
-      result = await member.likeChosenItemByMember(
-        req.member,
-        like_ref_id,
-        group_type
-      );
-    // console.log("result:::::", result);
-
-    res.json({ state: "success", data: result });
-  } catch (err) {
-    console.log(`ERROR, cont/likeMemberChosen`);
-    res.json({ state: "fail", message: err.message });
   }
 };
 
