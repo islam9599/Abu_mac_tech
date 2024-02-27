@@ -43,6 +43,24 @@ memberController.login = async (req, res) => {
   }
 };
 
+memberController.updateMember = async (req, res) => {
+  try {
+    console.log("POST, cont/updateMember");
+    assert.ok(req.member, Definer.auth_err3);
+    const data = req.body;
+    const member = new Member();
+    const result = await member.updateMemberData(
+      req.member?._id,
+      req.body,
+      req.file
+    );
+    res.json({ state: "success", data: result });
+  } catch (err) {
+    console.log(`ERROR, cont/updateMember`);
+    res.json({ state: "fail", message: err.message });
+  }
+};
+
 memberController.logout = (req, res) => {
   console.log("GET cont.logout");
   res.cookie("access_token", null, { maxAge: 0, httpOnly: true });
