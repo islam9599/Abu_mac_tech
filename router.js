@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const memberController = require("./controllers/memberController.js");
+const productController = require("./controllers/productController.js");
 const uploader_member = require("./utils/upload-multer.js")("members");
 
 /**********************************
@@ -24,4 +25,13 @@ router.post(
   uploader_member.single("mb_image"),
   memberController.updateMember
 );
+
+// Products related routers
+
+router.post(
+  "/products",
+  memberController.retrieveAuthMember,
+  productController.getAllProducts
+);
+
 module.exports = router;

@@ -33,7 +33,6 @@ class Product {
           lookup_auth_member_liked(auth_mb_id),
         ])
         .exec();
-      // console.log("result::", result);
 
       assert.ok(result, Definer.general_err1);
 
