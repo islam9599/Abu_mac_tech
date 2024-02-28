@@ -71,7 +71,6 @@ class Shop {
 
       assert.ok(result, Definer.general_err1);
       return result;
-      // increase view if member not seen the target before
     } catch (err) {
       throw err;
     }
