@@ -24,6 +24,7 @@ productController.getChosenProduct = async (req, res) => {
 
     const product = new Product();
     const result = await product.getChosenProductData(req.member, id);
+    console.log("result =>", result);
 
     res.json({ state: "success", data: result });
   } catch (error) {
@@ -51,7 +52,7 @@ productController.addNewProduct = async (req, res) => {
     assert.ok(result, Definer.product_err1);
 
     const html = `<script>
-                    alert('new dish added successfully');
+                    alert('new product added successfully');
                     window.location.replace("/abu_tech/products/menu")
                   </script>`;
     res.end(html);
