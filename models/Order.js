@@ -32,7 +32,6 @@ class Order {
       );
       console.log("order_id:::", order_id);
 
-      // order items creation
       const order_items = await this.recordOrderItemsData(order_id, data);
 
       return order_id;

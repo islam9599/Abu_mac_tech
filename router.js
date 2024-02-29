@@ -3,6 +3,7 @@ const router = express.Router();
 const memberController = require("./controllers/memberController.js");
 const productController = require("./controllers/productController.js");
 const shopController = require("./controllers/shopController.js");
+const orderController = require("./controllers/orderController.js");
 const uploader_member = require("./utils/upload-multer.js")("members");
 
 /**********************************
@@ -55,4 +56,22 @@ router.get(
   shopController.getChosenShop
 );
 
+// Orders related routers
+
+router.post(
+  "/orders/create",
+  memberController.retrieveAuthMember,
+  orderController.createOrder
+);
+router.get(
+  "/orders",
+  memberController.retrieveAuthMember,
+  orderController.getMyOrders
+);
+
+router.post(
+  "/orders/edit",
+  memberController.retrieveAuthMember,
+  orderController.editChosenOrder
+);
 module.exports = router;
