@@ -46,6 +46,11 @@ router.get(
   memberController.retrieveAuthMember,
   productController.getChosenProduct
 );
+router.post(
+  "/products/:id/review",
+  memberController.retrieveAuthMember,
+  productController.getChosenProductReview
+);
 
 // Shops related routers
 

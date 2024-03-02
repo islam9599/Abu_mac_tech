@@ -32,6 +32,21 @@ productController.getChosenProduct = async (req, res) => {
     res.json({ state: "fail", message: err.message });
   }
 };
+productController.getChosenProductReview = async (req, res) => {
+  try {
+    console.log("GET: cont/getChosenProduct");
+    const id = req.params.id;
+
+    const product = new Product();
+    const result = await product.getChosenProductReview(req.member, req.body);
+    console.log("result =>", result);
+
+    res.json({ state: "success", data: result });
+  } catch (error) {
+    console.log(`ERROR, cont/getChosenProduct, ${err.message}`);
+    res.json({ state: "fail", message: err.message });
+  }
+};
 
 /******************************************
  *             BSSR related methods       *

@@ -5,11 +5,13 @@ const {
 const assert = require("assert");
 const Definer = require("../lib/mistake");
 const ProductModel = require("../schema/product.model");
+const ReviewModel = require("../schema/review.model");
 const Member = require("./Member");
 
 class Product {
   constructor() {
     this.productModel = ProductModel;
+    this.reviewModel = ReviewModel;
   }
 
   async getAllProductsData(member, data) {
@@ -56,9 +58,25 @@ class Product {
         .aggregate([
           { $match: { _id: id, product_status: "PROCESS" } },
           lookup_auth_member_liked(auth_mb_id),
+          this.addReviewData(auth_mb_id),
         ])
         .exec();
       assert.ok(result, Definer.general_err1);
+      return result;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async getChosenProductReview(member, data) {
+    try {
+      mb_id = shapeIntoMongooseObjectId(member._id);
+      // console.log(data);
+
+      const new_review = new this.reviewModel(data);
+      const result = await new_review.save();
+
+      assert.ok(result, Definer.product_err1);
       return result;
     } catch (err) {
       throw err;

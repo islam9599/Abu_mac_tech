@@ -15,7 +15,7 @@ memberController.signup = async (req, res) => {
     console.log("token::::", token);
     res.cookie("access_token", token, {
       maxAge: 6 * 3600 * 1000,
-      httpOnly: true,
+      httpOnly: false,
     });
     res.json({ state: "success", data: new_member });
   } catch (err) {
