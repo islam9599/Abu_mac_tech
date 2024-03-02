@@ -221,17 +221,18 @@
        const mb_top = e.target.checked ? "Y" : "N";
 
       //  console.log(`${id} va ${mb_top}`);
-
-      });
-    
-      axios.post("/abu_tech/all-shops/edit", {id: id, mb_top: mb_top}).then(response => {
-        const result = response.data;
-        if(result.state === "success") alert("successully updated");
-        else alert(result.message)
-      })
+       axios.post("/abu_tech/all-shops/edit", {id: id, mb_top: mb_top}).then(response => {
+         const result = response.data;
+         if(result.state === "success") Swal.fire("successully updated");
+         else Swal.fire(result.message)
+       })
       .catch(err => console.log(err))
 
       })
+
+      });
+    
+     
 
 
       $(".hidding_btn").on("click", function () {
@@ -257,7 +258,7 @@
       axios.post("/abu_tech/all-shops/edit", {id: id, mb_status: mb_status}).then(response => {
         const result = response.data;
         console.log(result)
-        if(result.state === "success") alert("successully updated");
+        if(result.state === "success") Swal.fire("successully updated");
         else Swal.fire(result.message)
       })
       .catch(err => console.log(err))
