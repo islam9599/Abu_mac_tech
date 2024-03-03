@@ -40,6 +40,11 @@ router.post(
   memberController.retrieveAuthMember,
   productController.getAllProducts
 );
+router.get(
+  "/products/sale",
+  memberController.retrieveAuthMember,
+  productController.getAllSaleProducts
+);
 
 router.get(
   "/products/:id",

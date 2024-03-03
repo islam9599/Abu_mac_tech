@@ -21,6 +21,7 @@ class Product {
       if (data.shop_mb_id) {
         match["shop_mb_id"] = shapeIntoMongooseObjectId(data.shop_mb_id);
         match["product_collection"] = data.product_collection;
+        match["product_color"] = data.product_color;
       }
       const sort =
         data.order === "product_price"
@@ -38,6 +39,65 @@ class Product {
 
       assert.ok(result, Definer.general_err1);
 
+      return result;
+    } catch (err) {
+      throw err;
+    }
+  }
+  // async getAllSaleProductsData(member, data) {
+  //   try {
+  //     const auth_mb_id = shapeIntoMongooseObjectId(member?._id);
+  //     let match = { product_status: "PROCESS" };
+
+  //     match["product_discount"] = data.product_discount;
+
+  //     const sort =
+  //       data.order === "product_price"
+  //         ? { [data.order]: 1 }
+  //         : { [data.order]: -1 };
+  //     const result = await this.productModel
+  //       .aggregate([
+  //         { $match: match },
+  //         { $sort: sort },
+  //         { $skip: (data.page * 1 - 1) * data.limit },
+  //         { $limit: data.limit * 1 },
+  //         lookup_auth_member_liked(auth_mb_id),
+  //       ])
+  //       .exec();
+
+  //     assert.ok(result, Definer.general_err1);
+
+  //     return result;
+  //   } catch (err) {
+  //     throw err;
+  //   }
+  // }
+  async getAllSaleProductsData(member, data) {
+    try {
+      const auth_mb_id = shapeIntoMongooseObjectId(member?._id);
+      let match = {
+        product_discount: 10,
+        product_status: "PROCESS",
+      };
+      let aggregationQuery = [];
+      data.limit = data["limit"] * 1;
+      data.page = data["page"] * 1;
+
+      const sort =
+        data.order === "product_price"
+          ? { [data.order]: 1 }
+          : { [data.order]: -1 };
+      const result = await this.productModel
+        .aggregate([
+          { $match: match },
+          { $sort: sort },
+          { $skip: (data.page * 1 - 1) * data.limit },
+          { $limit: data.limit * 1 },
+          lookup_auth_member_liked(auth_mb_id),
+        ])
+        .exec();
+      // console.log(member._id);
+      assert.ok(result, Definer.general_err1);
       return result;
     } catch (err) {
       throw err;

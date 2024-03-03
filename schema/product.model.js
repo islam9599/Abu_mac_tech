@@ -43,6 +43,10 @@ const productSchema = new mongoose.Schema(
       type: Number,
       required: false,
       default: 0,
+      enum: {
+        values: [10, 20, 30],
+        message: "{value} is not among permitted enum values",
+      },
     },
     product_left_cnt: {
       type: Number,
@@ -81,6 +85,7 @@ const productSchema = new mongoose.Schema(
         message: "{value} is not among permitted enum values",
       },
     },
+    is_onsale: { type: Boolean, default: false },
     product_brand: {
       type: String,
       required: false,
