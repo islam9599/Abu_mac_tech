@@ -17,14 +17,55 @@ class Product {
   async getAllProductsData(member, data) {
     try {
       const auth_mb_id = shapeIntoMongooseObjectId(member?._id);
-      let match = { product_status: "PROCESS" };
-      if (data.shop_mb_id) {
-        match["shop_mb_id"] = shapeIntoMongooseObjectId(data.shop_mb_id);
-        match["product_collection"] = data.product_collection;
-        match["product_color"] = data.product_color;
+      let match = {
+        product_status: "PROCESS",
+      };
+
+      let aggregationQuery = [];
+
+      data.limit = data["limit"] * 1;
+      data.page = data["page"] * 1;
+
+      switch (data.order) {
+        case "all":
+          aggregationQuery.push({ $match: match });
+          break;
+        case "collection":
+          match["product_collection"] = data.product_collection;
+          aggregationQuery.push({ $match: match });
+          break;
+        case "brand":
+          match["product_brand"] = data.product_brand;
+          aggregationQuery.push({ $match: match });
+          break;
+        default:
+          aggregationQuery.push({ $match: match });
+          const sort = { [data.order]: -1 };
+          aggregationQuery.push({ $sort: sort });
+          break;
       }
+      aggregationQuery.push({ $skip: (data.page - 1) * data.limit });
+      aggregationQuery.push({ $limit: data.limit });
+
+      aggregationQuery.push(lookup_auth_member_liked(auth_mb_id));
+      const result = await this.productModel.aggregate(aggregationQuery).exec();
+
+      assert.ok(result, Definer.general_err1);
+
+      return result;
+    } catch (err) {
+      throw err;
+    }
+  }
+  async getAllProductsByBrandData(member, data) {
+    try {
+      const auth_mb_id = shapeIntoMongooseObjectId(member?._id);
+      let match = {
+        product_status: "PROCESS",
+        product_brand: data.product_brand,
+      };
       const sort =
-        data.order === "product_price"
+        data.order === "product_views"
           ? { [data.order]: 1 }
           : { [data.order]: -1 };
       const result = await this.productModel
@@ -44,34 +85,7 @@ class Product {
       throw err;
     }
   }
-  // async getAllSaleProductsData(member, data) {
-  //   try {
-  //     const auth_mb_id = shapeIntoMongooseObjectId(member?._id);
-  //     let match = { product_status: "PROCESS" };
 
-  //     match["product_discount"] = data.product_discount;
-
-  //     const sort =
-  //       data.order === "product_price"
-  //         ? { [data.order]: 1 }
-  //         : { [data.order]: -1 };
-  //     const result = await this.productModel
-  //       .aggregate([
-  //         { $match: match },
-  //         { $sort: sort },
-  //         { $skip: (data.page * 1 - 1) * data.limit },
-  //         { $limit: data.limit * 1 },
-  //         lookup_auth_member_liked(auth_mb_id),
-  //       ])
-  //       .exec();
-
-  //     assert.ok(result, Definer.general_err1);
-
-  //     return result;
-  //   } catch (err) {
-  //     throw err;
-  //   }
-  // }
   async getAllSaleProductsData(member, data) {
     try {
       const auth_mb_id = shapeIntoMongooseObjectId(member?._id);
@@ -79,7 +93,7 @@ class Product {
         product_discount: 10,
         product_status: "PROCESS",
       };
-      let aggregationQuery = [];
+
       data.limit = data["limit"] * 1;
       data.page = data["page"] * 1;
 

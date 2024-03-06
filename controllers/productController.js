@@ -16,6 +16,22 @@ productController.getAllProducts = async (req, res) => {
     res.json({ state: "fail", message: err.message });
   }
 };
+productController.getAllProductsByBrand = async (req, res) => {
+  try {
+    console.log("POST: cont/getAllProductsByBrand");
+
+    const product = new Product();
+    const result = await product.getAllProductsByBrandData(
+      req.member,
+      req.body
+    );
+    res.json({ state: "success", data: result });
+  } catch (err) {
+    console.log(`ERROR, cont/getAllProductsByBrandData, ${err.message}`);
+    res.json({ state: "fail", message: err.message });
+  }
+};
+
 productController.getAllSaleProducts = async (req, res) => {
   try {
     console.log("GET: cont/getAllSaleProducts");
