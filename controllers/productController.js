@@ -31,6 +31,20 @@ productController.getAllProductsByBrand = async (req, res) => {
     res.json({ state: "fail", message: err.message });
   }
 };
+productController.getAllProductsByTextIndexes = async (req, res) => {
+  try {
+    console.log("POST: cont/getAllProductsByBrand");
+    const data = req.query.text;
+
+    const product = new Product();
+    const result = await product.getAllProductsByTextIndexesData(data);
+    console.log("result::", result);
+    res.json({ state: "success", data: result });
+  } catch (err) {
+    console.log(`ERROR, cont/getAllProductsByBrandData, ${err.message}`);
+    res.json({ state: "fail", message: err.message });
+  }
+};
 
 productController.getAllSaleProducts = async (req, res) => {
   try {
@@ -53,7 +67,6 @@ productController.getChosenProduct = async (req, res) => {
 
     const product = new Product();
     const result = await product.getChosenProductData(req.member, id);
-    console.log("result =>", result);
 
     res.json({ state: "success", data: result });
   } catch (error) {

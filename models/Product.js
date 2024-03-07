@@ -74,6 +74,7 @@ class Product {
           { $sort: sort },
           { $skip: (data.page * 1 - 1) * data.limit },
           { $limit: data.limit * 1 },
+          { $text: { $search } },
           lookup_auth_member_liked(auth_mb_id),
         ])
         .exec();
@@ -81,6 +82,18 @@ class Product {
       assert.ok(result, Definer.general_err1);
 
       return result;
+    } catch (err) {
+      throw err;
+    }
+  }
+  async getAllProductsByTextIndexesData(data) {
+    try {
+      const result = await this.productModel.find({ $text: { $search: data } });
+      console.log("result::::", result);
+
+      assert.ok(result, Definer.general_err1);
+
+      return await result;
     } catch (err) {
       throw err;
     }
@@ -132,11 +145,10 @@ class Product {
         .aggregate([
           { $match: { _id: id, product_status: "PROCESS" } },
           lookup_auth_member_liked(auth_mb_id),
-          this.addReviewData(auth_mb_id),
         ])
         .exec();
       assert.ok(result, Definer.general_err1);
-      return result;
+      return result[0];
     } catch (err) {
       throw err;
     }
