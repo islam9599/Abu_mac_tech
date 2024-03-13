@@ -36,6 +36,7 @@ router_bssr.post(
 router_bssr.get("/logout", shopController.logout);
 router_bssr.get("/check-me", shopController.checkSessions);
 
+// Product related routers
 router_bssr.get(
   "/products/menu",
   shopController.validateAuthShop,
@@ -53,16 +54,7 @@ router_bssr.post(
   productController.updateChosenProduct
 );
 
-// Other routers
-
-router_bssr.get("/menu", function (req, res) {
-  res.send("Menu sahifadasiz");
-});
-
-router_bssr.get("/community", function (req, res) {
-  res.send("Community sahifadasiz");
-});
-
+// Shop related routers
 router_bssr.get(
   "/all-shops",
   shopController.validateAdmin,

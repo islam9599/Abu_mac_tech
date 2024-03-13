@@ -6,6 +6,7 @@ const shopController = require("./controllers/shopController.js");
 const orderController = require("./controllers/orderController.js");
 const uploader_member = require("./utils/upload-multer.js")("members");
 const communityController = require("./controllers/communityController.js");
+const reviewController = require("./controllers/reviewController.js");
 const uploader_community = require("./utils/upload-multer.js")("community");
 const followController = require("./controllers/followController.js");
 
@@ -64,10 +65,13 @@ router.get(
   memberController.retrieveAuthMember,
   productController.getChosenProduct
 );
+
+// Product review related routers
+
 router.post(
-  "/products/:id/review",
+  "/:id/review",
   memberController.retrieveAuthMember,
-  productController.getChosenProductReview
+  reviewController.createReview
 );
 
 // Shops related routers
@@ -148,4 +152,6 @@ router.get(
   memberController.retrieveAuthMember,
   followController.getMemberFollowers
 );
+// Product review related routers
+
 module.exports = router;

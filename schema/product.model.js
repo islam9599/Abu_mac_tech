@@ -12,6 +12,7 @@ const {
   product_colors_enums,
   product_brands_enums,
 } = require("../lib/config");
+const reviewModel = require("./review.model");
 
 const Schema = mongoose.Schema;
 
@@ -126,10 +127,19 @@ const productSchema = new mongoose.Schema(
       required: false,
       default: 0,
     },
+
     product_views: {
       type: Number,
       required: false,
       default: 0,
+    },
+    rating: {
+      type: Number,
+      require: true,
+    },
+    comment: {
+      type: String,
+      require: true,
     },
     shop_mb_id: {
       type: Schema.Types.ObjectId,

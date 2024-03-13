@@ -6,7 +6,7 @@ let reviewController = module.exports;
 
 reviewController.createReview = async (req, res) => {
   try {
-    console.log("POST, cont/createArticle");
+    console.log("POST, cont/createReview");
     assert.ok(req.member, Definer.general_err1);
 
     const review = new Review();
@@ -15,7 +15,7 @@ reviewController.createReview = async (req, res) => {
 
     res.json({ state: "success", data: result });
   } catch (err) {
-    console.log(`ERROR, cont/createArticle`);
+    console.log(`ERROR, cont/createReview`);
     res.json({ state: "fail", message: err.message });
   }
 };

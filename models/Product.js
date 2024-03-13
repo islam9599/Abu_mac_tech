@@ -164,10 +164,8 @@ class Product {
     try {
       mb_id = shapeIntoMongooseObjectId(member._id);
       // console.log(data);
-
-      const new_review = new this.reviewModel(data);
+      const new_review = new this.reviewModell(data);
       const result = await new_review.save();
-
       assert.ok(result, Definer.product_err1);
       return result;
     } catch (err) {

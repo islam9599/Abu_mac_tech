@@ -5,14 +5,13 @@ const schema = mongoose.Schema;
 const reviewSchema = new mongoose.Schema(
   {
     mb_id: { type: mongoose.Schema.Types.ObjectId, required: true },
-    review_ref_id: { type: mongoose.Schema.Types.ObjectId, required: true },
     rating: {
       type: Number,
-      require: false,
+      require: true,
     },
     comment: {
       type: String,
-      require: false,
+      require: true,
     },
   },
   { timestamps: { createdAt: true } }
