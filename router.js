@@ -7,6 +7,7 @@ const orderController = require("./controllers/orderController.js");
 const uploader_member = require("./utils/upload-multer.js")("members");
 const communityController = require("./controllers/communityController.js");
 const uploader_community = require("./utils/upload-multer.js")("community");
+const followController = require("./controllers/followController.js");
 
 /**********************************
  *             REST API           *
@@ -127,5 +128,24 @@ router.get(
   "/community/single-article/:art_id",
   memberController.retrieveAuthMember,
   communityController.getChosenArticle
+);
+// Following related routers
+
+router.post(
+  "/follow/subscribe",
+  memberController.retrieveAuthMember,
+  followController.subscribe
+);
+
+router.post(
+  "/follow/unsubscribe",
+  memberController.retrieveAuthMember,
+  followController.unsubscribe
+);
+router.get("/follow/followings", followController.getMemberFollowings);
+router.get(
+  "/follow/followers",
+  memberController.retrieveAuthMember,
+  followController.getMemberFollowers
 );
 module.exports = router;

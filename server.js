@@ -18,12 +18,11 @@ mongoose.connect(
       //   console.log(client);
       //   module.exports = client;
       //   console.log(goose);
-      const app = require("./app");
-      const server = htpp.createServer(app);
+      const server = require("./app");
       let PORT = process.env.PORT || 3005;
       server.listen(PORT, function () {
         console.log(
-          `The server is running successfully on port: ${PORT}, http://localhost:${PORT} `
+          `The server is running successfully on port: ${PORT}, http//localhost:${PORT} `
         );
       });
     }

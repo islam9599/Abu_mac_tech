@@ -22,6 +22,9 @@ class Product {
       };
 
       let aggregationQuery = [];
+      if (data.searchText) {
+        match["$text"] = { $search: data.searchText };
+      }
 
       data.limit = data["limit"] * 1;
       data.page = data["page"] * 1;
@@ -88,9 +91,12 @@ class Product {
   }
   async getAllProductsByTextIndexesData(data) {
     try {
-      const result = await this.productModel.find({ $text: { $search: data } });
-      console.log("result::::", result);
-
+      const result = await this.productModel.find({
+        $text: { $search: data },
+      });
+      //  const result = await this.productModel.find({
+      //    product_name: { $regex: new RegExp(`^${data}`, "i") },
+      //  });
       assert.ok(result, Definer.general_err1);
 
       return await result;
