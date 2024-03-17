@@ -69,10 +69,12 @@ router.get(
 // Product review related routers
 
 router.post(
-  "/:id/review",
+  "/review/product",
   memberController.retrieveAuthMember,
   reviewController.createReview
 );
+
+router.get("/product/reviews", reviewController.getChosenProductReviews);
 
 // Shops related routers
 

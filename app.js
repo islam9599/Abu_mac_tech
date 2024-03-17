@@ -57,7 +57,7 @@ app.set("view engine", "ejs");
 // 4. Routing map
 
 // app.use("/resto", router_bssr);
-app.use("/resto", router_bssr);
+app.use("/abu_tech", router_bssr);
 app.use("/", router);
 
 const server = htpp.createServer(app);

@@ -92,14 +92,15 @@ class Product {
   async getAllProductsByTextIndexesData(data) {
     try {
       const result = await this.productModel.find({
-        $text: { $search: data },
+        $text: { $search: data.map((letter) => letter) },
       });
-      //  const result = await this.productModel.find({
-      //    product_name: { $regex: new RegExp(`^${data}`, "i") },
-      //  });
       assert.ok(result, Definer.general_err1);
+      // const regexPattern = new RegExp(data, "i");
+      // const result = await ProductModel.find({
+      //   product_name: { $regex: regexPattern },
+      // });
 
-      return await result;
+      return result;
     } catch (err) {
       throw err;
     }
@@ -150,6 +151,14 @@ class Product {
       const result = await this.productModel
         .aggregate([
           { $match: { _id: id, product_status: "PROCESS" } },
+          {
+            $lookup: {
+              from: "members",
+              localField: "product_reviews.mb_id",
+              foreignField: "_id",
+              as: "member_data",
+            },
+          },
           lookup_auth_member_liked(auth_mb_id),
         ])
         .exec();

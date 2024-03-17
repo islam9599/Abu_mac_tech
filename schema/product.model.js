@@ -133,14 +133,16 @@ const productSchema = new mongoose.Schema(
       required: false,
       default: 0,
     },
-    rating: {
-      type: Number,
-      require: true,
+    product_ratings: {
+      type: Array,
     },
-    comment: {
-      type: String,
-      require: true,
+    product_comments: {
+      type: Array,
     },
+    product_reviews: {
+      type: Array,
+    },
+    mb_id: { type: mongoose.Schema.Types.ObjectId, ref: "Member" },
     shop_mb_id: {
       type: Schema.Types.ObjectId,
       ref: "Member",

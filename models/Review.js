@@ -15,127 +15,92 @@ class Review {
     this.productModel = ProductModel;
     this.mb_id = mb_id;
   }
-
-  async validateTargetItem(id, group_type) {
+  async createReviewData(member, review_ref_id, data) {
     try {
-      let result;
+      const mb_id = shapeIntoMongooseObjectId(member?._id);
+      review_ref_id = shapeIntoMongooseObjectId(review_ref_id);
+      const review = new Review(mb_id);
 
-      switch (group_type) {
-        case "member":
-          result = await this.memberModel
-            .findOne({
-              _id: id,
-              mb_status: "ACTIVE",
-            })
-            .exec();
-          break;
-        case "product":
-          result = await this.productModel
-            .findOne({
-              _id: id,
-              product_status: "PROCESS",
-            })
-            .exec();
-          break;
-        case "community":
-          result = await this.boArticleModel
-            .findOne({
-              _id: id,
-              art_status: "active",
-            })
-            .exec();
-        default:
-          break;
-      }
+      const updated_data = await review.insertMemberReview(review_ref_id, data);
+      assert.ok(data, Definer.general_err1);
 
-      return !!result;
-    } catch (err) {
-      throw err;
-    }
-  }
-
-  async checkLikeExistence(like_ref_id) {
-    try {
-      const like = await this.reviewModel
-        .findOne({
-          mb_id: this.mb_id,
-          like_ref_id: like_ref_id,
-        })
-        .exec();
-      console.log("like:::", like);
-      return !!like;
-    } catch (err) {
-      throw err;
-    }
-  }
-  async removeMemberLike(like_ref_id, group_type) {
-    try {
-      const result = await this.reviewModel
-        .findOneAndDelete({
-          mb_id: this.mb_id,
-          like_ref_id: like_ref_id,
-        })
-        .exec();
-
-      await this.modifyItemLikeCounts(like_ref_id, group_type, -1);
+      const result = {
+        review_ref_id: data.review_ref_id,
+        review_data: updated_data,
+      };
       return result;
     } catch (err) {
       throw err;
     }
   }
-  async insertMemberLike(like_ref_id, group_type) {
+
+  async insertMemberReview(review_ref_id, data) {
     try {
-      const new_like = new this.reviewModel({
+      const new_review = new this.reviewModel({
         mb_id: this.mb_id,
-        like_ref_id: like_ref_id,
-        like_group: group_type,
+        review_ref_id: review_ref_id,
+        product_comment: data.product_comments,
+        product_rating: data.product_ratings,
       });
 
-      const result = await new_like.save();
-
-      await this.modifyItemLikeCounts(like_ref_id, group_type, 1);
-
+      const result = await new_review.save();
+      await this.modifyProductReview(review_ref_id, data);
       return result;
     } catch (err) {
       console.log(err);
       throw new Error(Definer.mongodb_validation_err);
     }
   }
-  async modifyItemLikeCounts(like_ref_id, group_type, modifier) {
+  async modifyProductReview(review_ref_id, data) {
     try {
-      switch (group_type) {
-        case "member":
-          await this.memberModel
-            .findByIdAndUpdate(
-              {
-                _id: like_ref_id,
-              },
-              { $inc: { mb_likes: modifier } }
-            )
-            .exec();
-          break;
-        case "product":
-          await this.productModel
-            .findByIdAndUpdate(
-              {
-                _id: like_ref_id,
-              },
-              { $inc: { product_likes: modifier } }
-            )
-            .exec();
-          break;
-        case "community":
-          await this.boArticleModel
-            .findByIdAndUpdate(
-              {
-                _id: like_ref_id,
-              },
-              { $inc: { art_likes: modifier } }
-            )
-            .exec();
-          break;
-      }
-      return true;
+      let product_reviews = {
+        product_ratings: data.product_ratings,
+        product_comments: data.product_comments,
+        mb_id: this.mb_id,
+      };
+      const result = await this.productModel
+        .findOneAndUpdate(
+          {
+            _id: review_ref_id,
+          },
+          {
+            $push: {
+              product_reviews: product_reviews,
+            },
+          }
+        )
+        .exec();
+
+      return result;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async getChosenProductReviewsData(inquiry) {
+    try {
+      const review_ref_id = shapeIntoMongooseObjectId(inquiry.review_ref_id),
+        page = inquiry.page * 1,
+        limit = inquiry.limit * 1;
+      const result = await this.reviewModel
+        .aggregate([
+          { $match: { review_ref_id: review_ref_id } },
+          { $sort: { createdAt: -1 } },
+          { $skip: (page - 1) * limit },
+          { $limit: limit },
+          {
+            $lookup: {
+              from: "members",
+              localField: "mb_id",
+              foreignField: "_id",
+              as: "member_data",
+            },
+          },
+          { $unwind: "$member_data" },
+        ])
+        .exec();
+      assert.ok(result, Definer.general_err3);
+      return result;
     } catch (err) {
       throw err;
     }
