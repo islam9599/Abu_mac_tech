@@ -18,30 +18,26 @@ productController.getAllProducts = async (req, res) => {
 };
 productController.getAllProductsByBrand = async (req, res) => {
   try {
-    console.log("POST: cont/getAllProductsByBrand");
+    console.log("get: cont/getAllProductsByBrand");
 
     const product = new Product();
-    const result = await product.getAllProductsByBrandData(
-      req.member,
-      req.body
-    );
+    const result = await product.getAllProductsByBrandData(req.body, req.query);
     res.json({ state: "success", data: result });
   } catch (err) {
     console.log(`ERROR, cont/getAllProductsByBrandData, ${err.message}`);
     res.json({ state: "fail", message: err.message });
   }
 };
-productController.getAllProductsByTextIndexes = async (req, res) => {
+productController.getProductsByPriceRange = async (req, res) => {
   try {
-    console.log("POST: cont/getAllProductsByBrand");
-    const data = req.query.text;
+    console.log("POST: cont/getProductsByPriceRange");
+    const query = req.query;
 
     const product = new Product();
-    const result = await product.getAllProductsByTextIndexesData(data);
-    console.log("result::", result);
+    const result = await product.getProductsByPriceRangeData(query);
     res.json({ state: "success", data: result });
   } catch (err) {
-    console.log(`ERROR, cont/getAllProductsByBrandData, ${err.message}`);
+    console.log(`ERROR, cont/getProductsByPriceRange, ${err.message}`);
     res.json({ state: "fail", message: err.message });
   }
 };

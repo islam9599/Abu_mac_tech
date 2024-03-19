@@ -14,24 +14,32 @@ class Product {
     this.reviewModel = ReviewModel;
   }
 
-  async getAllProductsData(member, data) {
+  async getAllProductsData(member, data, inquiry) {
     try {
+      const min_price = data.min_price,
+        max_price = data.max_price;
       const auth_mb_id = shapeIntoMongooseObjectId(member?._id);
       let match = {
         product_status: "PROCESS",
+        product_name: {
+          $regex: ".*" + data.searchText + ".*",
+          $options: "i",
+        },
       };
 
       let aggregationQuery = [];
-      if (data.searchText) {
-        match["$text"] = { $search: data.searchText };
-      }
+      // if (data.searchText && inquiry) {
+      //   match["$text"] = { $search: data.searchText };
+      // }
 
       data.limit = data["limit"] * 1;
       data.page = data["page"] * 1;
 
       switch (data.order) {
         case "all":
-          aggregationQuery.push({ $match: match });
+          aggregationQuery.push({
+            $match: match,
+          });
           break;
         case "collection":
           match["product_collection"] = data.product_collection;
@@ -39,7 +47,9 @@ class Product {
           break;
         case "brand":
           match["product_brand"] = data.product_brand;
-          aggregationQuery.push({ $match: match });
+          aggregationQuery.push({
+            $match: match,
+          });
           break;
         default:
           aggregationQuery.push({ $match: match });
@@ -52,21 +62,32 @@ class Product {
 
       aggregationQuery.push(lookup_auth_member_liked(auth_mb_id));
       const result = await this.productModel.aggregate(aggregationQuery).exec();
-
       assert.ok(result, Definer.general_err1);
+
+      const filtered = await ProductModel.find({
+        product_price: { $gte: min_price, $lte: max_price },
+      });
+      assert.ok(filtered, Definer.general_err1);
+
+      const combinedResults = result.concat(filtered);
 
       return result;
     } catch (err) {
       throw err;
     }
   }
-  async getAllProductsByBrandData(member, data) {
+  async getAllProductsByBrandData(data, inquiry) {
     try {
-      const auth_mb_id = shapeIntoMongooseObjectId(member?._id);
       let match = {
         product_status: "PROCESS",
-        product_brand: data.product_brand,
       };
+      if (data.searchText && data.min_price && max_price) {
+        match["$text"] = { $search: data.searchText };
+        match["product_price"] = {
+          $gte: data.min_price,
+          $lte: data.max_price,
+        };
+      }
       const sort =
         data.order === "product_views"
           ? { [data.order]: 1 }
@@ -77,8 +98,6 @@ class Product {
           { $sort: sort },
           { $skip: (data.page * 1 - 1) * data.limit },
           { $limit: data.limit * 1 },
-          { $text: { $search } },
-          lookup_auth_member_liked(auth_mb_id),
         ])
         .exec();
 
@@ -89,17 +108,15 @@ class Product {
       throw err;
     }
   }
-  async getAllProductsByTextIndexesData(data) {
+  async getProductsByPriceRangeData(inquiry) {
     try {
-      const result = await this.productModel.find({
-        $text: { $search: data.map((letter) => letter) },
+      const min_price = inquiry.min_price,
+        max_price = inquiry.max_price;
+
+      const result = await ProductModel.find({
+        product_price: { $gte: min_price, $lte: max_price },
       });
       assert.ok(result, Definer.general_err1);
-      // const regexPattern = new RegExp(data, "i");
-      // const result = await ProductModel.find({
-      //   product_name: { $regex: regexPattern },
-      // });
-
       return result;
     } catch (err) {
       throw err;
@@ -151,14 +168,6 @@ class Product {
       const result = await this.productModel
         .aggregate([
           { $match: { _id: id, product_status: "PROCESS" } },
-          {
-            $lookup: {
-              from: "members",
-              localField: "product_reviews.mb_id",
-              foreignField: "_id",
-              as: "member_data",
-            },
-          },
           lookup_auth_member_liked(auth_mb_id),
         ])
         .exec();

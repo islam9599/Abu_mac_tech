@@ -44,16 +44,8 @@ router.post(
   memberController.retrieveAuthMember,
   productController.getAllProducts
 );
-router.get(
-  "/products/search",
-  memberController.retrieveAuthMember,
-  productController.getAllProductsByTextIndexes
-);
-router.post(
-  "/products/brands",
-  memberController.retrieveAuthMember,
-  productController.getAllProductsByBrand
-);
+router.get("/products/price", productController.getProductsByPriceRange);
+router.get("/products/filtered-price", productController.getAllProductsByBrand);
 router.get(
   "/products/sale",
   memberController.retrieveAuthMember,
