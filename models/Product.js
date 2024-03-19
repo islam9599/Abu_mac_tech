@@ -25,6 +25,7 @@ class Product {
           $regex: ".*" + data.searchText + ".*",
           $options: "i",
         },
+        product_price: { $gte: min_price, $lte: max_price },
       };
 
       let aggregationQuery = [];
