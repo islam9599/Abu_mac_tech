@@ -45,7 +45,7 @@ const productSchema = new mongoose.Schema(
       required: false,
       default: 0,
       enum: {
-        values: [10, 20, 30],
+        values: [0, 10, 20, 30],
         message: "{value} is not among permitted enum values",
       },
     },
@@ -151,6 +151,11 @@ const productSchema = new mongoose.Schema(
   },
   { timestamps: true } // createdAt &&& updatedAt
 );
+productSchema.virtual("discounted_price").get(function () {
+  return this.product_price * (1 - this.product_discount / 100);
+});
+productSchema.set("toJSON", { virtuals: true });
+productSchema.set("toObject", { virtuals: true });
 
 productSchema.index(
   {

@@ -17,7 +17,11 @@ class Order {
         delivery_cost = 0;
       const mb_id = shapeIntoMongooseObjectId(member._id);
       data.map((item) => {
-        order_total_amount += item.quantity * item.price;
+        order_total_amount +=
+          item.quantity *
+          (item.discount > 0
+            ? item.price - item.price / item.discount
+            : item.price);
       });
 
       if (order_total_amount < 100) {
