@@ -52,6 +52,12 @@ class Product {
             $match: match,
           });
           break;
+        case "sale":
+          match["is_onsale"] = true;
+          aggregationQuery.push({
+            $match: match,
+          });
+          break;
         default:
           aggregationQuery.push({ $match: match });
           const sort = { [data.order]: -1 };
@@ -128,7 +134,7 @@ class Product {
     try {
       const auth_mb_id = shapeIntoMongooseObjectId(member?._id);
       let match = {
-        product_discount: 10,
+        is_onsale: true,
         product_status: "PROCESS",
       };
 
@@ -169,6 +175,14 @@ class Product {
       const result = await this.productModel
         .aggregate([
           { $match: { _id: id, product_status: "PROCESS" } },
+          {
+            $lookup: {
+              from: "products",
+              localField: "product_collection",
+              foreignField: "product_collection",
+              as: "related_collection",
+            },
+          },
           lookup_auth_member_liked(auth_mb_id),
         ])
         .exec();
