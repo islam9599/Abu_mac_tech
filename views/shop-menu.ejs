@@ -36,19 +36,19 @@
       <div class="shop_container">
         <div class="dish_table">
           <span class="new_dish_txt">
-            <%=member.mb_nick.toUpperCase()%> Shop Menyusi</span
+            <%=member.mb_nick.toUpperCase()%> Shop Product Panel</span
           >
 
           <table class="table table-bordered table-hover">
             <thead class="thead-light">
               <th scope="col">T/r</th>
-              <th scope="col">Brand nomi</th>
-              <th scope="col">Brand turi</th>
-              <th scope="col">Qurilma tezkor xotirasi</th>
-              <th scope="col">Qurilma narxi</th>
-              <th scope="col">Qurilma qoldiq miqdori</th>
-              <th scope="col">Qurilma holati</th>
-              <th scope="col">Qurilmani edit qilish</th>
+              <th scope="col">Product Name</th>
+              <th scope="col">Product Description</th>
+              <th scope="col">Product Memory</th>
+              <th scope="col">Product Price</th>
+              <th scope="col">Product Quantity</th>
+              <th scope="col">Product Status</th>
+              <th scope="col">Edit </th>
             </thead>
 
             <% shop_data.map((value, key) => { %>
@@ -89,7 +89,7 @@
             class="long_input"
             style="align-items: flex-end; margin-bottom: 25px"
           >
-            <button class="btn btn-primary hidding_btn">Elektron qo'shish</button>
+            <button class="btn btn-primary hidding_btn">Add New Product</button>
           </div>
         </div>
         <form
@@ -100,15 +100,15 @@
           enctype="multipart/form-data"
         >
           <div class="long_input" style="display: flex; align-items: center">
-            <span class="new_dish_txt">Yangi Elektron Qurilma</span>
+            <span class="new_dish_txt">New Device</span>
           </div>
 
           <div>
             <div class="long_input">
-              <label for="">Qurilma Nomi</label>
+              <label for="">Product Name</label>
               <input
                 type="text"
-                placeholder="Qurilma Nomi"
+                placeholder="Product Name"
                 name="product_name"
                 class="product_name"
               />
@@ -124,20 +124,20 @@
 
           <div class="half_input_frame">
             <div class="half_input">
-              <label for="">Qurilma Narxi</label>
+              <label for="">Product Price</label>
               <input
                 type="number"
-                placeholder="Qurilma Narxi"
+                placeholder="Product Price"
                 name="product_price"
                 class="product_price"
               />
             </div>
 
             <div class="half_input">
-              <label for="">Qurilma qoldiq miqdori</label>
+              <label for="">Product Quantity</label>
               <input
                 type="number"
-                placeholder="Qurilma qoldiq miqdori"
+                placeholder="Product Quantity"
                 name="product_left_cnt"
                 class="product_left_cnt"
               />
@@ -145,7 +145,7 @@
           </div>
           <div class="half_input_frame">
             <div class="half_input">
-              <label for="">Qurilma Turi</label>
+              <label for="">Product Type</label>
               <select
                 class="product_collection"
                 name="product_collection"
@@ -160,7 +160,7 @@
             </div>
 
             <div class="half_input" id="product_memory">
-              <label for="">Qurilma Ichki Xotira Hajmi</label>
+              <label for="">Product Memory</label>
               <select class="product_memory" name="product_memory" id="">
                 <option value="8">8gb</option>
                 <option value="16" selected>16gb</option>
@@ -170,9 +170,36 @@
             </div>
 
           </div>
-             <div class="half_input_frame">
+          <div class="half_input_frame">
             <div class="half_input">
-              <label for="">Qurilma Rangi</label>
+              <label for="">Product Storage</label>
+              <select
+                class="product_storage"
+                name="product_storage"
+                id=""
+              >
+                <option value="128" selected>128 gb</option>
+                <option value="256">256 gb</option>
+                <option value="512">512 gb</option>
+                <option value="1024">1024 gb</option>
+                <option value="2048">2048 gb</option>
+              </select>
+            </div>
+
+            <div class="half_input" id="product_brand">
+              <label for="">Product Display</label>
+              <select class="product_display" name="product_display" id="">
+                <option value="13" selected>13 inch</option>
+                <option value="14" >14 inch</option>
+                <option value="15">15 inch</option>
+                <option value="16">16 inch</option>
+              </select>
+            </div>
+
+          </div>
+          <div class="half_input_frame">
+            <div class="half_input">
+              <label for="">Product Color</label>
               <select
                 class="product_color"
                 name="product_color"
@@ -187,30 +214,56 @@
             </div>
 
             <div class="half_input" id="product_brand">
-              <label for="">Qurilma Brand</label>
+              <label for="">Product Brand</label>
               <select class="product_brand" name="product_brand" id="">
                 <option value="apple">Apple</option>
                 <option value="samsung" selected>Samsung</option>
-                <option value="xiaomi">Xiaomi</option>
+                <option value="hp">Hp</option>
                 <option value="microsoft">Microsoft</option>
                 <option value="etc">Etc</option>
               </select>
             </div>
 
           </div>
+          <div class="half_input_frame">
+            <div class="half_input">
+              <label for="">Product isSale</label>
+              <select
+                class="is_onsale"
+                name="is_onsale"
+                id=""
+              >
+                <option value="false" selected>False</option>
+                <option value="true">True</option>
+              </select>
+            </div>
+
+            <div class="half_input" id="product_discount">
+              <label for="">Product Discount</label>
+              <select class="product_discount" name="product_discount" id="">
+                <option value="0" selected>0%</option>
+                <option value="10" >10%</option>
+                <option value="20">20%</option>
+                <option value="30">30%</option>
+             
+              </select>
+            </div>
+
+          </div>
           <div class="long_input">
-            <label for="">Qurilma haqida</label>
+            <label for="">Product Description</label>
             <textarea
               name="product_description"
               class="product_description"
               id=""
               cols="30"
               rows="10"
+              placeholder="Product Description"
             ></textarea>
           </div>
 
           <div class="img_frame">
-            <label for="">Qurilma Rasmlari</label>
+            <label for="">Product Images</label>
             <div class="media_frame">
               <div class="upload_img_box">
                 <img
@@ -306,14 +359,14 @@
             style="align-items: flex-end; margin-bottom: 25px"
           >
             <button type="submit" class="btn btn-primary">
-              Chop etish
+              Add
             </button>
           </div>
           <div
             class="long_input"
             style="align-items: flex-end; margin-bottom: 25px"
            >
-            <button class="btn btn-primary hidding_form">Bekor Qilish</button>
+            <button class="btn btn-primary hidding_form">Cancel</button>
           </div>
         </form>
       </div>
@@ -404,7 +457,12 @@
         product_description = $(".product_description").val(),
         product_memory = $(".product_memory").val(),
         product_color = $(".product_color").val(),
-        product_brand = $(".product_brand").val();
+        product_brand = $(".product_brand").val(),
+        is_onsale = $(".is_onsale").val(),
+        product_discount = $(".product_discount").val(),
+        product_storage = $(".product_storage").val(),
+        product_display = $(".product_display").val();
+
       
 
       if (
@@ -414,7 +472,7 @@
         product_left_cnt === "" ||
         product_collection === "" ||
         product_description === "" ||
-        product_memory === ""
+        product_memory === "" || product_storage === ''
       
       ) {
         // alert(`Iltimos hamma ma'lumotlarni tog'ri kiriting!`);
@@ -434,6 +492,7 @@
           "image/jpeg",
           "image/png",
           "image/webp",
+          "image/avif",
         ];
 
       if (!validImageTypes.includes(fileType)) {

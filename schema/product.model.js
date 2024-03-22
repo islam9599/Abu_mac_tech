@@ -3,14 +3,13 @@ const mongoose = require("mongoose");
 const {
   product_collection_enums,
   product_status_enums,
-  product_volume_enums,
   product_display_enums,
   product_memory_enums,
   product_hard_storage_enums,
   product_colors_enums: product_graphics_enums,
-  product_chip_enums,
   product_colors_enums,
   product_brands_enums,
+  product_discount_enums,
 } = require("../lib/config");
 const reviewModel = require("./review.model");
 
@@ -45,7 +44,7 @@ const productSchema = new mongoose.Schema(
       required: false,
       default: 0,
       enum: {
-        values: [0, 10, 20, 30],
+        values: product_discount_enums,
         message: "{value} is not among permitted enum values",
       },
     },
@@ -71,7 +70,8 @@ const productSchema = new mongoose.Schema(
     },
     product_storage: {
       type: Number,
-      required: false,
+      required: true,
+      default: 128,
       enum: {
         values: product_hard_storage_enums,
         message: "{value} is not among permitted enum values",
