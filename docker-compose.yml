@@ -1,0 +1,25 @@
+version: "1.1"
+
+services:
+  node:
+    container_name: abu-mac-tech_backend
+    restart: always
+    image: node:16.14.0
+    ports:
+      - 3005:3005
+    volumes:
+      - ./:/usr/src/app
+    working_dir: /usr/src/app
+
+    networks:
+      - abu-mac-tech_network
+
+    # PRODUCTION
+    command: bash -c "npm install && npm run start:prod"
+
+    # DEVELOPMENT
+    # command: bash -c "npm install && npm run dev"
+
+networks:
+  abu-mac-tech_network:
+    driver: bridge
